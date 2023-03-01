@@ -1,7 +1,25 @@
+import { useRef } from "react";
+
 function Register() {
+  const username = useRef(null);
+  const password = useRef(null);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    var user = {
+      "username": username.current.value,
+      "password": password.current.value,
+    };
+    fetch("http://localhost:4000/register", {
+      method: "POST",
+      mode: "cors",
+      body: JSON.stringify(user),
+    });
+  };
+
   return (
     <div className="login-form">
-      <form action="/login" method="post">
+      <form action="/register" method="post">
         <h2 className="text-center">Register</h2>
         <div className="form-group">
           <input
@@ -9,6 +27,7 @@ function Register() {
             placeholder="Username"
             name="username"
             type={"text"}
+            ref={username}
           ></input>
         </div>
         <div className="form-group">
@@ -17,10 +36,15 @@ function Register() {
             placeholder="Password"
             name="password"
             type={"password"}
+            ref={password}
           ></input>
         </div>
         <div className="form-group">
-          <button type="submit" className="btn btn-primary">
+          <button
+            onClick={handleSubmit}
+            type="submit"
+            className="btn btn-primary"
+          >
             Register
           </button>
         </div>
