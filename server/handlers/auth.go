@@ -2,18 +2,13 @@ package handlers
 
 import (
 	"ToDo/database"
-	"crypto/rand"
 	"encoding/json"
 	"fmt"
 	"io"
-	"math/big"
 	"net/http"
-	"os"
-	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/gorilla/sessions"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -34,7 +29,6 @@ type timestamp struct {
 	VisitsN int       `bson:"visits_n,omitempty" json:"visits_n,omitempty"`
 }
 
-var Store = sessions.NewCookieStore([]byte(os.Getenv(randomString(15))))
 var user User
 
 func Login(c *gin.Context) {
@@ -66,13 +60,6 @@ func Login(c *gin.Context) {
 		return
 	}
 	user = result
-	session, _ := Store.Get(c.Request, "user")
-	session.Values["id"] = username
-	err = session.Save(c.Request, c.Writer)
-	if err != nil {
-		ErrorHandler(c.Writer, c.Request, 500)
-		return
-	}
 	updateTimeStamp(c, users)
 	if user.Role == "admin" {
 		c.Redirect(http.StatusSeeOther, "/admin")
@@ -103,13 +90,6 @@ func Register(c *gin.Context) {
 	writeResult(c.Writer, "success")
 }
 
-func Logout(c *gin.Context) {
-	session, _ := Store.Get(c.Request, "user")
-	session.Options.MaxAge = -1
-	session.Save(c.Request, c.Writer)
-	c.Redirect(http.StatusSeeOther, "/")
-}
-
 func HashPassword(password string) (string, error) {
 	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
 	return string(bytes), err
@@ -118,27 +98,6 @@ func HashPassword(password string) (string, error) {
 func CheckPasswordHash(password, hash string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
 	return err == nil
-}
-
-const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ123456789"
-
-func randomString(n int) string {
-	sb := strings.Builder{}
-	sb.Grow(n)
-	for i := 0; i < n; i++ {
-		n, _ := rand.Int(rand.Reader, big.NewInt(int64(len(charset))))
-		sb.WriteByte(charset[n.Int64()])
-	}
-	return sb.String()
-}
-
-func GetUser() User {
-	return user
-}
-
-func isAuth(c *gin.Context) bool {
-	session, _ := Store.Get(c.Request, "user")
-	return session.Values["id"] == user.Username
 }
 
 func updateTimeStamp(c *gin.Context, users *mongo.Collection) {

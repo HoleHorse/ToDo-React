@@ -63,10 +63,6 @@ func DeleteUser(c *gin.Context) {
 }
 
 func AdminPage(c *gin.Context) {
-	if !isAuth(c) {
-		c.Redirect(http.StatusSeeOther, "/login")
-		return
-	}
 	tmpl, err := template.ParseFiles("./templates/admin.html")
 	if err != nil {
 		ErrorHandler(c.Writer, c.Request, http.StatusInternalServerError)
