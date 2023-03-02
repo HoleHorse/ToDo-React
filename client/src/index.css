@@ -114,3 +114,9 @@ label {
   margin-top: 50px;
   background-color: rgba(0, 0, 0, 0.35);
 }
+
+text {
+  color:white;
+  font-size: 50px;
+  margin-left: 10px;
+}

@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"ToDo/database"
+	"encoding/json"
 	"net/http"
 	"strconv"
 	"strings"
@@ -15,18 +16,18 @@ import (
 )
 
 type ToDo struct {
-	Id       string             `bson:"_id,omitempty"`
-	Title    string             `bson:"title,omitempty"`
-	Category string             `bson:"category,omitempty"`
-	Text     string             `bson:"text,omitempty"`
-	Due      string             `bson:"due"`
-	State    string             `bson:"state,omitempty"`
-	Author   primitive.ObjectID `bson:"author,omitempty"`
+	Id       string             `bson:"_id,omitempty" json:"_id,omitempty"`
+	Title    string             `bson:"title,omitempty" json:"title,omitempty"`
+	Category string             `bson:"category,omitempty" json:"category,omitempty"`
+	Text     string             `bson:"text,omitempty" json:"text,omitempty"`
+	Due      string             `bson:"due" json:"due"`
+	State    string             `bson:"state,omitempty" json:"state,omitempty"`
+	Author   primitive.ObjectID `bson:"author,omitempty" json:"author,omitempty"`
 }
 
-func GetToDoList(c *gin.Context) []ToDo {
+func GetToDoList(c *gin.Context, Id primitive.ObjectID) []ToDo {
 	todos := database.Client.Database("project").Collection("todos")
-	filter := bson.D{{Key: "author", Value: GetUser().Id}}
+	filter := bson.D{{Key: "author", Value: Id}}
 	cursor, _ := todos.Find(c, filter)
 	var results []ToDo
 	for cursor.Next(c) {
@@ -45,7 +46,7 @@ func GetToDoList(c *gin.Context) []ToDo {
 	return results
 }
 
-func AddToDo(c *gin.Context) {
+func AddToDo(c *gin.Context, Id primitive.ObjectID) {
 	todos := database.Client.Database("project").Collection("todos")
 	title := c.PostForm("title")
 	category := c.PostForm("category")
@@ -60,7 +61,7 @@ func AddToDo(c *gin.Context) {
 	due := time.Date(year, getMonth(month), day, hour, minute, 0, 0, loc).Format(time.RFC3339)
 	due = due[:16]
 	_id := primitive.NewObjectID().Hex()
-	todos.InsertOne(c, ToDo{_id, title, category, text, due, "Not complete", GetUser().Id})
+	todos.InsertOne(c, ToDo{_id, title, category, text, due, "Not complete", Id})
 	c.Redirect(http.StatusSeeOther, "/todo")
 }
 
@@ -112,6 +113,28 @@ func DeleteToDo(c *gin.Context) {
 	c.Redirect(http.StatusSeeOther, "/todo")
 }
 
+func GetToDo(c *gin.Context) {
+	c.Writer.Header().Set("Access-Control-Allow-Origin", "http://localhost:3000")
+	c.Writer.Header().Set("Content-Type", "application/json")
+	Id, _ := primitive.ObjectIDFromHex(c.Param("id"))
+	var todos []ToDo
+	if c.Query("search") != "" {
+		todos = Seacrh(c)
+	} else if c.Query("sort") != "" {
+		k := c.Query("sort")
+		t := c.Query("sortType")
+		v := 1
+		if t == "desc" {
+			v = -1
+		}
+		todos = Sort(c, v, k, Id)
+	} else {
+		todos = GetToDoList(c, Id)
+	}
+	j, _ := json.Marshal(todos)
+	c.Writer.Write(j)
+}
+
 func Seacrh(c *gin.Context) []ToDo {
 	keyword := c.Query("search")
 	todos := database.Client.Database("project").Collection("todos")
@@ -127,13 +150,13 @@ func Seacrh(c *gin.Context) []ToDo {
 	return results
 }
 
-func Sort(c *gin.Context, v int, keyword string) []ToDo {
+func Sort(c *gin.Context, v int, keyword string, Id primitive.ObjectID) []ToDo {
 	todos := database.Client.Database("project").Collection("todos")
-	filter := bson.D{}
+	filter := bson.D{{Key: "author", Value: Id}}
 	opts := options.Find().SetSort(bson.D{{Key: keyword, Value: v}})
-	cursor, err := todos.Find(c, filter, opts)
+	cursor, _ := todos.Find(c, filter, opts)
 	var results []ToDo
-	if err = cursor.All(c, &results); err != nil {
+	if err := cursor.All(c, &results); err != nil {
 		panic(err)
 	}
 	return results
