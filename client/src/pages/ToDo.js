@@ -2,13 +2,13 @@ import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import HeaderSearch from "../components/headers/HeaderSearch";
 import Spinner from "../components/UI/Spinner";
+import CardContainer from "../components/CardContainer";
 
 function ToDo() {
   const [loading, setLoading] = useState(true);
   const [todos, setTodos] = useState([]);
   const { state } = useLocation();
   const { id } = state;
-  console.log(id);
 
   useEffect(() => {
     setTimeout(() => {
@@ -35,9 +35,7 @@ function ToDo() {
   return (
     <div>
       <HeaderSearch />
-      {todos.map((todo) => (
-        <div>{todo.title}</div>
-      ))}
+      <CardContainer todos={todos}/>
     </div>
   );
 }

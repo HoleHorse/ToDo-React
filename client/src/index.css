@@ -73,7 +73,8 @@ body {
 }
 
 .card-body {
-  min-width: 342px;
+  color: black;
+  min-width: 340px;
 }
 
 .add-btn {
@@ -115,8 +116,19 @@ label {
   background-color: rgba(0, 0, 0, 0.35);
 }
 
-text {
+.brand-name {
   color:white;
   font-size: 50px;
   margin-left: 10px;
+}
+
+.card {
+  min-width: 340px;
+  max-width: 340px;
+  margin: 10px 10px;
+}
+
+.card-header {
+  color: black;
+  padding-top: 16px;
 }

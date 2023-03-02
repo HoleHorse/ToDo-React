@@ -11,7 +11,7 @@ function HeaderBack() {
             width={75}
             class="d-inline-block align-text-top"
           />
-          <text>ToDo</text>
+          <span className="brand-name">ToDo</span>
         </a>
         <a href="/todo">
           <i
