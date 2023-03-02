@@ -21,7 +21,7 @@ function ToDo() {
           setTodos(response);
           setLoading(false);
         });
-    }, 2000)
+    }, 2000);
   }, [id]);
 
   if (loading) {
@@ -35,7 +35,7 @@ function ToDo() {
   return (
     <div>
       <HeaderSearch />
-      <CardContainer todos={todos}/>
+      <CardContainer todos={todos} />
     </div>
   );
 }

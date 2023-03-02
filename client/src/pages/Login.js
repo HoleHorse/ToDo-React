@@ -1,25 +1,28 @@
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Cookies from "universal-cookie";
 
 function Login() {
   const username = useRef(null);
   const password = useRef(null);
   const [user, setUser] = useState({});
   const navigate = useNavigate();
+  const cookies = new Cookies();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    var user = {
+    var u = {
       username: username.current.value,
       password: password.current.value,
     };
     fetch("http://localhost:4000/login", {
       method: "POST",
       mode: "cors",
-      body: JSON.stringify(user),
+      body: JSON.stringify(u),
     })
       .then((res) => res.json())
       .then((res) => setUser(res));
+    cookies.set("user-session", user.password, { path: "/" });
   };
   return (
     <div className="login-form">

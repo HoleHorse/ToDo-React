@@ -1,7 +1,6 @@
 .spinner {
-    position: absolute;
-    top: 45%;
-    right: 50%;
+    margin-top: 30vh;
+    margin-left: 50vw;
     width: 64px;
     height: 64px;
     border: 8px solid;

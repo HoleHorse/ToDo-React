@@ -13,27 +13,15 @@ function ToDoCard({ todo }) {
         <p className="card-text">{todo.text}</p>
       </div>
       <div className="card-footer d-flex justify-content-between">
-        <a
-          href="/edit/{{.Id}}"
-          className="btn btn-warning"
-          style={{ width: 80 }}
-        >
+        <button className="btn btn-warning" style={{ width: 80 }}>
           Update
-        </a>
-        <a
-          href="/delete/{{.Id}}"
-          className="btn btn-danger"
-          style={{ width: 80 }}
-        >
+        </button>
+        <button className="btn btn-danger" style={{ width: 80 }}>
           Delete
-        </a>
-        <a
-          href="/read/{{.Id}}"
-          className="btn btn-success"
-          style={{ width: 80 }}
-        >
+        </button>
+        <button className="btn btn-success" style={{ width: 80 }}>
           Read
-        </a>
+        </button>
       </div>
     </div>
   );
