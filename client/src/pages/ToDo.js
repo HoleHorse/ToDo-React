@@ -2,10 +2,11 @@ import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import Header from "../components/UI/Header";
 import Spinner from "../components/UI/Spinner";
-import CardContainer from "../components/CardContainer";
+import ToDoContainer from "../components/ToDoContainer";
 import Logout from "../components/UI/Logout";
 import Cookies from "universal-cookie";
 import { Navigate } from "react-router-dom";
+import AddBtn from "../components/UI/AddBtn"
 
 function ToDo() {
   const cookies = new Cookies();
@@ -46,8 +47,9 @@ function ToDo() {
   return (
     <>
       <Header />
-      <CardContainer todos={todos} />
+      <ToDoContainer todos={todos} />
       <Logout />
+      <AddBtn />
     </>
   );
 }

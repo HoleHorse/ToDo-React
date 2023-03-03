@@ -27,12 +27,15 @@ body {
 
 @media only screen and (max-width: 600px) {
   .landing-group img {
-      width: 178px;
-      margin-left: 1rem;
-    }
-    .logout-btn {
-      font-size: 35px;
-    }
+    width: 178px;
+    margin-left: 1rem;
+  }
+  .logout-btn {
+    font-size: 35px;
+  }
+  .add-btn {
+    font-size: 35px;
+  }
 }
 
 .login-form {
@@ -87,15 +90,6 @@ body {
   min-width: 340px;
 }
 
-.add-btn {
-  position: fixed;
-  bottom: 0%;
-  right: 0%;
-  margin-bottom: 25px;
-  margin-right: 25px;
-  color: white;
-}
-
 .logout-btn {
   position: fixed;
   bottom: 0%;
@@ -103,6 +97,21 @@ body {
   margin-bottom: 25px;
   margin-left: 25px;
   color: white;
+  border-radius: 50%;
+  background-color: #025041;
+  padding: 10px 10px;
+}
+
+.add-btn {
+  position: fixed;
+  bottom: 0%;
+  right: 0%;
+  margin-bottom: 25px;
+  margin-right: 25px;
+  color: white;
+  border-radius: 50%;
+  background-color: #025041;
+  padding: 10px 12px;
 }
 
 i {
