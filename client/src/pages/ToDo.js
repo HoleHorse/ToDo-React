@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import HeaderSearch from "../components/headers/HeaderSearch";
+import Header from "../components/UI/Header";
 import Spinner from "../components/UI/Spinner";
 import CardContainer from "../components/CardContainer";
 import Logout from "../components/UI/Logout";
@@ -37,7 +37,7 @@ function ToDo() {
   if (loading) {
     return (
       <div>
-        <HeaderSearch />
+        <Header />
         <Spinner />
         <Logout />
       </div>
@@ -45,7 +45,7 @@ function ToDo() {
   }
   return (
     <>
-      <HeaderSearch />
+      <Header />
       <CardContainer todos={todos} />
       <Logout />
     </>

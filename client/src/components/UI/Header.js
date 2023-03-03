@@ -1,6 +1,6 @@
 import logo from "../../img/logo.png";
 
-function HeaderSearch() {
+function Header() {
   function handleSort(e) {
     e.preventDefault();
   }
@@ -11,7 +11,7 @@ function HeaderSearch() {
     <nav className="navbar navbar-expand-lg bg-dark">
       <div className="container">
         <a className="navbar-brand" href="/todo" style={{ marginTop: 20 }}>
-          <img src={logo} width={70} style={{ marginBottom: 20 }}></img>
+          <img src={logo} width={70} style={{ marginBottom: 20 }} alt="Logo"></img>
           <span style={{ color: "white", fontSize: 45 }}>ToDo</span>
         </a>
         <button
@@ -22,7 +22,7 @@ function HeaderSearch() {
           aria-expanded="false"
           aria-label="Toggle navigation"
         >
-          <span class="navbar-toggler-icon"></span>
+          <span className="navbar-toggler-icon"></span>
         </button>
         <div className="collapse navbar-collapse" id="content">
           <ul className="navbar-nav me-auto mb-2 mb-lg-0"></ul>
@@ -57,7 +57,7 @@ function HeaderSearch() {
               style={{
                 width: 100 + "%",
                 height: 40,
-                marginTop: 3,
+                marginTop: 5,
               }}
             >
               <option defaultValue={true}>Sort by</option>
@@ -72,7 +72,7 @@ function HeaderSearch() {
               style={{
                 marginRight: 10,
                 height: 40,
-                marginTop: 3,
+                marginTop: 5,
               }}
               onClick={handleSort}
             >
@@ -83,11 +83,11 @@ function HeaderSearch() {
             <input
               className="form-control"
               placeholder="Search"
-              style={{ height: 5, marginTop: 3 }}
+              style={{ height: 5, marginTop: 5 }}
             />
             <button
               className="btn btn-outline-success"
-              style={{ height: 5, marginTop: 3, marginRight: 10 }}
+              style={{ height: 5, marginTop: 5, marginRight: 10 }}
               onClick={handleSearch}
             >
               Submit
@@ -99,4 +99,4 @@ function HeaderSearch() {
   );
 }
 
-export default HeaderSearch;
+export default Header;
