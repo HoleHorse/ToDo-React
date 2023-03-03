@@ -38,11 +38,6 @@ func GetToDoList(c *gin.Context, Id primitive.ObjectID) []ToDo {
 		}
 		results = append(results, result)
 	}
-	for i := 0; i < len(results); i++ {
-		if len(results[i].Text) > 100 {
-			results[i].Text = results[i].Text[:100] + "..."
-		}
-	}
 	return results
 }
 
