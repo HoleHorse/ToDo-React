@@ -99,15 +99,6 @@ func EditToDo(c *gin.Context) {
 	c.Redirect(http.StatusSeeOther, "/todo")
 }
 
-func GetOne(c *gin.Context) ToDo {
-	todos := database.Client.Database("project").Collection("todos")
-	_id := c.Param("id")
-	filter := bson.D{{Key: "_id", Value: _id}}
-	var todo ToDo
-	todos.FindOne(c, filter).Decode(&todo)
-	return todo
-}
-
 func DeleteToDo(c *gin.Context) {
 	todos := database.Client.Database("project").Collection("todos")
 	_id := c.Param("id")
