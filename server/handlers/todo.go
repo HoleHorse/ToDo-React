@@ -16,7 +16,7 @@ import (
 )
 
 type ToDo struct {
-	Id       string             `bson:"_id,omitempty" json:"_id,omitempty"`
+	Id       primitive.ObjectID `bson:"_id,omitempty" json:"_id,omitempty"`
 	Title    string             `bson:"title,omitempty" json:"title,omitempty"`
 	Category string             `bson:"category,omitempty" json:"category,omitempty"`
 	Text     string             `bson:"text,omitempty" json:"text,omitempty"`
@@ -46,12 +46,20 @@ func GetToDoList(c *gin.Context, Id primitive.ObjectID) []ToDo {
 	return results
 }
 
-func AddToDo(c *gin.Context, Id primitive.ObjectID) {
+func AddToDo(c *gin.Context) {
+	c.Writer.Header().Set("Access-Control-Allow-Origin", "http://localhost:3000")
+	c.Writer.Header().Set("Content-Type", "application/json")
+	body := ToDo{}
+	decoder := json.NewDecoder(c.Request.Body)
+	if err := decoder.Decode(&body); err != nil {
+		writeResult(c.Writer, "failure")
+	}
+	defer c.Request.Body.Close()
 	todos := database.Client.Database("project").Collection("todos")
-	title := c.PostForm("title")
-	category := c.PostForm("category")
-	text := c.PostForm("text")
-	date := strings.FieldsFunc(c.PostForm("due"), split)
+	title := body.Title
+	category := body.Category
+	text := body.Text
+	date := strings.FieldsFunc(body.Due, split)
 	year, _ := strconv.Atoi(date[0])
 	month, _ := strconv.Atoi(date[1])
 	day, _ := strconv.Atoi(date[2])
@@ -60,9 +68,9 @@ func AddToDo(c *gin.Context, Id primitive.ObjectID) {
 	loc := time.Now().Location()
 	due := time.Date(year, getMonth(month), day, hour, minute, 0, 0, loc).Format(time.RFC3339)
 	due = due[:16]
-	_id := primitive.NewObjectID().Hex()
-	todos.InsertOne(c, ToDo{_id, title, category, text, due, "Not complete", Id})
-	c.Redirect(http.StatusSeeOther, "/todo")
+	_id := primitive.NewObjectID()
+	todos.InsertOne(c, ToDo{_id, title, category, text, due, "Not complete", body.Author})
+	writeResult(c.Writer, "success")
 }
 
 func EditToDo(c *gin.Context) {

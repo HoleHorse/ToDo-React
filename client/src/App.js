@@ -3,6 +3,7 @@ import Landing from "./pages/Landing";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import ToDo from "./pages/ToDo";
+import Add from "./pages/Add";
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/todo" element={<ToDo />} />
+      <Route path="/add" element={<Add />} />
     </Routes>
   );
 }

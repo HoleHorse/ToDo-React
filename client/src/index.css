@@ -36,6 +36,9 @@ body {
   .add-btn {
     font-size: 35px;
   }
+  .add-card label {
+    font-size: 16px;
+  }
 }
 
 .login-form {
@@ -129,10 +132,12 @@ label {
 
 .add-card {
   width: 50%;
+  min-width: 320px;
   border: solid white 2px;
   border-radius: 10px;
   margin-top: 50px;
   background-color: rgba(0, 0, 0, 0.35);
+  padding: 3% 3%;
 }
 
 .brand-name {
@@ -150,4 +155,8 @@ label {
 .card-header {
   color: black;
   padding-top: 16px;
+}
+
+.tr-border-bm {
+  border-bottom: #ffffff36 2px solid;
 }

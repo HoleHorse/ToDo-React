@@ -6,7 +6,7 @@ import { HiddenAlert } from "../components/UI/Alert";
 function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [user, setUser] = useState({});
+  const [role, setRole] = useState("");
   const navigate = useNavigate();
   const cookies = new Cookies();
 
@@ -29,14 +29,19 @@ function Login() {
       body: JSON.stringify(u),
     })
       .then((res) => res.json())
-      .then((res) => setUser(res));
-    cookies.set("user-session", user.password, { path: "/", maxAge: 3600 * 3 });
+      .then((res) => {
+        cookies.set("user-session", res._id, {
+          path: "/",
+          maxAge: 3600 * 3,
+        });
+        setRole(res.role)
+      })
   };
   return (
     <div className="login-form">
       <HiddenAlert />
-      {user.role === "admin" && navigate("/admin", { state: { id: user._id } })}
-      {user.role === "user" && navigate("/todo", { state: { id: user._id } })}
+      {role === "admin" && navigate("/admin")}
+      {role === "user" && navigate("/todo")}
       <form action="/login" method="post">
         <h2 className="text-center">Log in</h2>
         <div className="form-group">

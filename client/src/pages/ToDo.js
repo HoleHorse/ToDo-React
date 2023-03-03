@@ -1,26 +1,20 @@
 import { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
 import Header from "../components/UI/Header";
 import Spinner from "../components/UI/Spinner";
 import ToDoContainer from "../components/ToDoContainer";
 import Logout from "../components/UI/Logout";
 import Cookies from "universal-cookie";
 import { Navigate } from "react-router-dom";
-import AddBtn from "../components/UI/AddBtn"
+import AddBtn from "../components/UI/AddBtn";
 
 function ToDo() {
   const cookies = new Cookies();
   const [loading, setLoading] = useState(true);
   const [todos, setTodos] = useState([]);
-  var { state } = useLocation();
-  if (state === null) {
-    state = {
-      id: 0,
-    };
-  }
+  const id = cookies.get("user-session")
 
   useEffect(() => {
-    fetch("http://localhost:4000/todo/" + state.id, {
+    fetch("http://localhost:4000/todo/" + id, {
       method: "GET",
       mode: "cors",
     })
@@ -31,7 +25,7 @@ function ToDo() {
         }
         setLoading(false);
       });
-  }, [state]);
+  }, [id]);
   if (cookies.get("user-session") === undefined) {
     return <Navigate to={"/login"} replace={true} />;
   }
