@@ -3,40 +3,52 @@ import { useLocation } from "react-router-dom";
 import HeaderSearch from "../components/headers/HeaderSearch";
 import Spinner from "../components/UI/Spinner";
 import CardContainer from "../components/CardContainer";
+import Logout from "../components/UI/Logout";
+import Cookies from "universal-cookie";
+import { Navigate } from "react-router-dom";
 
 function ToDo() {
+  const cookies = new Cookies();
   const [loading, setLoading] = useState(true);
   const [todos, setTodos] = useState([]);
-  const { state } = useLocation();
-  const { id } = state;
+  var { state } = useLocation();
+  if (state === null) {
+    state = {
+      id: 0,
+    };
+  }
 
   useEffect(() => {
-    setTimeout(() => {
-      fetch("http://localhost:4000/todo/" + id, {
-        method: "GET",
-        mode: "cors",
-      })
-        .then((response) => response.json())
-        .then((response) => {
+    fetch("http://localhost:4000/todo/" + state.id, {
+      method: "GET",
+      mode: "cors",
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        if (response !== null) {
           setTodos(response);
-          setLoading(false);
-        });
-    }, 2000);
-  }, [id]);
-
+        }
+        setLoading(false);
+      });
+  }, [state]);
+  if (cookies.get("user-session") === undefined) {
+    return <Navigate to={"/login"} replace={true} />;
+  }
   if (loading) {
     return (
       <div>
         <HeaderSearch />
         <Spinner />
+        <Logout />
       </div>
     );
   }
   return (
-    <div>
+    <>
       <HeaderSearch />
       <CardContainer todos={todos} />
-    </div>
+      <Logout />
+    </>
   );
 }
 

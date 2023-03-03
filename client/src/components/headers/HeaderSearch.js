@@ -2,34 +2,39 @@ import logo from "../../img/logo.png";
 
 function HeaderSearch() {
   function handleSort(e) {
-    e.preventDefault()
+    e.preventDefault();
   }
   function handleSearch(e) {
-    e.preventDefault()
+    e.preventDefault();
   }
   return (
-    <nav className="navbar bg-dark">
+    <nav className="navbar navbar-expand-lg bg-dark">
       <div className="container">
-        <div className="row">
-          <a className="navbar-brand d-flex col-lg-3" href="/todo">
-            <img
-              src={logo}
-              alt="Logo"
-              width={75}
-              className="d-inline-block align-text-top"
-            />
-            <span style={{ fontSize: 50, color: "white" }}>ToDo</span>
-          </a>
-          <form
-            className="d-flex col-lg-4"
-            style={{ marginLeft: 10, marginTop: 25 }}
-          >
+        <a className="navbar-brand" href="/todo" style={{ marginTop: 20 }}>
+          <img src={logo} width={70} style={{ marginBottom: 20 }}></img>
+          <span style={{ color: "white", fontSize: 45 }}>ToDo</span>
+        </a>
+        <button
+          className="navbar-toggler"
+          data-bs-toggle="collapse"
+          data-bs-target="#content"
+          aria-controls="content"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div className="collapse navbar-collapse" id="content">
+          <ul className="navbar-nav me-auto mb-2 mb-lg-0"></ul>
+          <form className="d-flex">
             <div style={{ flexDirection: "column", marginRight: 10 }}>
               <div className="form-check">
                 <input
                   className="form-check-input"
                   type={"radio"}
                   value="asc"
+                  name="sortType"
+                  defaultChecked
                 />
                 <label style={{ fontSize: 16 }} className="form-check-label">
                   Ascending
@@ -40,7 +45,7 @@ function HeaderSearch() {
                   className="form-check-input"
                   type={"radio"}
                   value="desc"
-                  defaultChecked
+                  name="sortType"
                 />
                 <label style={{ fontSize: 16 }} className="form-check-label">
                   Descending
@@ -49,7 +54,11 @@ function HeaderSearch() {
             </div>
             <select
               className="form-select"
-              style={{ height: 40, marginTop: 3 }}
+              style={{
+                width: 100 + "%",
+                height: 40,
+                marginTop: 3,
+              }}
             >
               <option defaultValue={true}>Sort by</option>
               <option value="category">Category</option>
@@ -61,20 +70,16 @@ function HeaderSearch() {
             <button
               className="btn btn-outline-success"
               style={{
-                width: 100 + "px",
                 marginRight: 10,
                 height: 40,
                 marginTop: 3,
               }}
               onClick={handleSort}
             >
-              Sort
+              Submit
             </button>
           </form>
-          <form
-            className="d-flex col-lg-4"
-            style={{ marginTop: 25, paddingBottom: 25 }}
-          >
+          <form className="d-flex" style={{ marginBottom: 10 }}>
             <input
               className="form-control"
               placeholder="Search"
@@ -82,10 +87,10 @@ function HeaderSearch() {
             />
             <button
               className="btn btn-outline-success"
-              style={{ height: 5, marginTop: 3 }}
+              style={{ height: 5, marginTop: 3, marginRight: 10 }}
               onClick={handleSearch}
             >
-              Search
+              Submit
             </button>
           </form>
         </div>
