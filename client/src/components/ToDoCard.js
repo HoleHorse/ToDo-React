@@ -1,8 +1,9 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Navigate } from "react-router-dom";
 import { useState } from "react";
 
 function ToDoCard({ todo }) {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const [result, setResult] = useState("todo");
   const [read, setRead] = useState(false);
   const [edit, setEdit] = useState(false);
   function clickR() {
@@ -11,10 +12,23 @@ function ToDoCard({ todo }) {
   function clickE() {
     setEdit(true);
   }
+  const handleDelete = () => {
+    fetch("http://localhost:4000/delete/" + todo._id, {
+      method: "POST",
+      mode: "cors",
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        setResult(res.result);
+      });
+  };
+  if (result === "success") {
+    return <Navigate to={"/todo"} replace={true} />;
+  }
   return (
     <>
-      {read && navigate("/read", {state: {todo: todo}})}
-      {edit && navigate("/edit", {state: {todo: todo}})}
+      {read && navigate("/read", { state: { todo: todo } })}
+      {edit && navigate("/edit", { state: { todo: todo } })}
       <div className="card todo-card">
         <div className="card-header d-flex justify-content-between">
           <h5 className="card-title">{todo.title}</h5>
@@ -35,7 +49,7 @@ function ToDoCard({ todo }) {
           >
             Update
           </button>
-          <button className="btn btn-danger" style={{ width: 80 }}>
+          <button onClick={handleDelete} className="btn btn-danger" style={{ width: 80 }}>
             Delete
           </button>
           <button

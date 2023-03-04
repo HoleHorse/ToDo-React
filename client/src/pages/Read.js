@@ -5,6 +5,7 @@ import { useState } from "react";
 
 function Read() {
   const navigate = useNavigate();
+  const [result, setResult] = useState("todo");
   const [edit, setEdit] = useState(false);
   function clickE() {
     setEdit(true);
@@ -16,6 +17,19 @@ function Read() {
     };
   }
   const { todo } = state; 
+  const handleDelete = () => {
+    fetch("http://localhost:4000/delete/" + todo._id, {
+      method: "POST",
+      mode: "cors",
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        setResult(res.result);
+      });
+  };
+  if (result === "success") {
+    return <Navigate to={"/todo"} replace={true} />;
+  }
   return (
     <>
       {todo === 0 && <Navigate to={"/todo"} replace={true} />}
@@ -38,7 +52,7 @@ function Read() {
             <button onClick={clickE} className="btn btn-warning">
               Update
             </button>
-            <button className="btn btn-danger">Delete</button>
+            <button onClick={handleDelete} className="btn btn-danger">Delete</button>
           </div>
         </div>
       </div>

@@ -3,7 +3,6 @@ package handlers
 import (
 	"ToDo/database"
 	"encoding/json"
-	"net/http"
 	"strconv"
 	"strings"
 	"time"
@@ -108,11 +107,13 @@ func EditToDo(c *gin.Context) {
 }
 
 func DeleteToDo(c *gin.Context) {
+	c.Writer.Header().Set("Access-Control-Allow-Origin", "http://localhost:3000")
+	c.Writer.Header().Set("Content-Type", "application/json")
 	todos := database.Client.Database("project").Collection("todos")
-	_id := c.Param("id")
+	_id, _ := primitive.ObjectIDFromHex(c.Param("id"))
 	filter := bson.D{{Key: "_id", Value: _id}}
 	todos.DeleteOne(c, filter)
-	c.Redirect(http.StatusSeeOther, "/todo")
+	writeResult(c.Writer, "success")
 }
 
 func GetToDo(c *gin.Context) {
