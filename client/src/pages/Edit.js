@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useLocation, Navigate } from "react-router-dom";
 import Cookies from "universal-cookie";
 import Header from "../components/UI/Header";
+import Return from "../components/UI/Return";
 
 function Edit() {
   const [result, setResult] = useState("todo");
@@ -142,6 +143,7 @@ function Edit() {
           </div>
         </form>
       </div>
+      <Return />
     </>
   );
 }

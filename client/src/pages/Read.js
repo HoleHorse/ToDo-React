@@ -1,4 +1,5 @@
 import Header from "../components/UI/Header";
+import Return from "../components/UI/Return"
 import { useLocation, Navigate, useNavigate } from "react-router-dom";
 import { useState } from "react";
 
@@ -41,6 +42,7 @@ function Read() {
           </div>
         </div>
       </div>
+      <Return />
     </>
   );
 }
