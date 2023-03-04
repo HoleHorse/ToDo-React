@@ -49,6 +49,7 @@ func AddToDo(c *gin.Context) {
 		writeResult(c.Writer, "failure")
 	}
 	defer c.Request.Body.Close()
+	body.setDeafults()
 	todos := database.Client.Database("project").Collection("todos")
 	title := body.Title
 	category := body.Category
@@ -76,6 +77,7 @@ func EditToDo(c *gin.Context) {
 		writeResult(c.Writer, "failure")
 	}
 	defer c.Request.Body.Close()
+	body.setDeafults()
 	todos := database.Client.Database("project").Collection("todos")
 	_id, _ := primitive.ObjectIDFromHex(c.Param("id"))
 	title := body.Title
@@ -195,4 +197,22 @@ func getMonth(n int) time.Month {
 
 func split(r rune) bool {
 	return r == ':' || r == '-' || r == 'T'
+}
+
+func (todo *ToDo) setDeafults() {
+	if todo.Title == "" {
+		todo.Title = "Undefined"
+	}
+	if todo.Category == "" {
+		todo.Category = "Undefined"
+	}
+	if todo.Text == "" {
+		todo.Text = "Undefined"
+	}
+	if todo.Due == "" {
+		todo.Due = "Undefined"
+	}
+	if todo.State == "" {
+		todo.State = "Undefined"
+	}
 }
