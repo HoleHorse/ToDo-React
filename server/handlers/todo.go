@@ -69,18 +69,26 @@ func AddToDo(c *gin.Context) {
 }
 
 func EditToDo(c *gin.Context) {
+	c.Writer.Header().Set("Access-Control-Allow-Origin", "http://localhost:3000")
+	c.Writer.Header().Set("Content-Type", "application/json")
+	body := ToDo{}
+	decoder := json.NewDecoder(c.Request.Body)
+	if err := decoder.Decode(&body); err != nil {
+		writeResult(c.Writer, "failure")
+	}
+	defer c.Request.Body.Close()
 	todos := database.Client.Database("project").Collection("todos")
-	_id := c.Param("id")
-	title := c.PostForm("title")
-	category := c.PostForm("category")
-	text := c.PostForm("text")
-	date := strings.FieldsFunc(c.PostForm("due"), split)
+	_id, _ := primitive.ObjectIDFromHex(c.Param("id"))
+	title := body.Title
+	category := body.Category
+	text := body.Text
+	date := strings.FieldsFunc(body.Due, split)
 	year, _ := strconv.Atoi(date[0])
 	month, _ := strconv.Atoi(date[1])
 	day, _ := strconv.Atoi(date[2])
 	hour, _ := strconv.Atoi(date[3])
 	minute, _ := strconv.Atoi(date[4])
-	state := c.PostForm("state")
+	state := body.State
 	loc := time.Now().Location()
 	due := time.Date(year, getMonth(month), day, hour, minute, 0, 0, loc).Format(time.RFC3339)
 	due = due[:16]
@@ -96,7 +104,7 @@ func EditToDo(c *gin.Context) {
 	if err != nil {
 		panic(err)
 	}
-	c.Redirect(http.StatusSeeOther, "/todo")
+	writeResult(c.Writer, "success")
 }
 
 func DeleteToDo(c *gin.Context) {

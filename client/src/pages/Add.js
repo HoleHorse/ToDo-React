@@ -39,63 +39,65 @@ function Add() {
         <form action="/add" method="post" style={{ padding: 2 + "%" }}>
           <div className="row">
             <table>
-              <tr>
-                <td>
-                  <label className="form-label">Title:</label>
-                </td>
-                <td>
-                  <input
-                    ref={title}
-                    name="title"
-                    type="text"
-                    className="form-control"
-                  />
-                </td>
-              </tr>
-              <tr className="tr-border-bm">
-                <td>
-                  <label className="form-label">Category:</label>
-                </td>
-                <td>
-                  <input
-                    ref={category}
-                    name="category"
-                    type="text"
-                    className="form-control"
-                    style={{ marginBottom: 2 + "%", marginTop: 2 + "%" }}
-                  />
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <label className="form-label">Text:</label>
-                </td>
-                <td>
-                  <textarea
-                    style={{ marginTop: 2 + "%" }}
-                    className="form-control"
-                    name="text"
-                    rows="10"
-                    ref={text}
-                  ></textarea>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <label className="form-label">Due date:</label>
-                </td>
-                <td>
-                  <input ref={due} type="datetime-local" name="due" />
-                </td>
-              </tr>
-              <tr>
-                <td></td>
-                <td style={{ textAlign: "right" }}>
-                  <button onClick={handleSubmit} className="btn btn-success">
-                    Submit
-                  </button>
-                </td>
-              </tr>
+              <tbody>
+                <tr>
+                  <td>
+                    <label className="form-label">Title:</label>
+                  </td>
+                  <td>
+                    <input
+                      ref={title}
+                      name="title"
+                      type="text"
+                      className="form-control"
+                    />
+                  </td>
+                </tr>
+                <tr className="tr-border-bm">
+                  <td>
+                    <label className="form-label">Category:</label>
+                  </td>
+                  <td>
+                    <input
+                      ref={category}
+                      name="category"
+                      type="text"
+                      className="form-control"
+                      style={{ marginBottom: 2 + "%", marginTop: 2 + "%" }}
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <label className="form-label">Text:</label>
+                  </td>
+                  <td>
+                    <textarea
+                      style={{ marginTop: 2 + "%" }}
+                      className="form-control"
+                      name="text"
+                      rows="10"
+                      ref={text}
+                    ></textarea>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <label className="form-label">Due date:</label>
+                  </td>
+                  <td>
+                    <input ref={due} type="datetime-local" name="due" />
+                  </td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td style={{ textAlign: "right" }}>
+                    <button onClick={handleSubmit} className="btn btn-success">
+                      Submit
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
             </table>
           </div>
         </form>

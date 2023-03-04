@@ -1,17 +1,24 @@
 import Header from "../components/UI/Header";
-import { useLocation, Navigate } from "react-router-dom";
+import { useLocation, Navigate, useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 function Read() {
-  var {state} = useLocation()
+  const navigate = useNavigate();
+  const [edit, setEdit] = useState(false);
+  function clickE() {
+    setEdit(true);
+  }
+  var { state } = useLocation();
   if (state === null) {
     state = {
-      todo: true
-    }
+      todo: 0,
+    };
   }
-  const {todo} = state
+  const { todo } = state; 
   return (
     <>
-      {todo && <Navigate to={"/todo"} replace={true}/> }
+      {todo === 0 && <Navigate to={"/todo"} replace={true} />}
+      {edit && navigate("/edit", { state: { todo: todo } })}
       <Header />
       <div className="d-flex justify-content-center">
         <div className="card read-card">
@@ -27,12 +34,10 @@ function Read() {
             <p className="card-text">{todo.text}</p>
           </div>
           <div className="card-footer">
-            <button className="btn btn-warning">
+            <button onClick={clickE} className="btn btn-warning">
               Update
             </button>
-            <button h className="btn btn-danger">
-              Delete
-            </button>
+            <button className="btn btn-danger">Delete</button>
           </div>
         </div>
       </div>
