@@ -1,17 +1,16 @@
 import logo from "../../img/logo.png";
 
 function Header() {
-  function handleSort(e) {
-    e.preventDefault();
-  }
-  function handleSearch(e) {
-    e.preventDefault();
-  }
   return (
     <nav className="navbar navbar-expand-lg bg-dark">
       <div className="container">
         <a className="navbar-brand" href="/todo" style={{ marginTop: 20 }}>
-          <img src={logo} width={70} style={{ marginBottom: 20 }} alt="Logo"></img>
+          <img
+            src={logo}
+            width={70}
+            style={{ marginBottom: 20 }}
+            alt="Logo"
+          ></img>
           <span style={{ color: "white", fontSize: 45 }}>ToDo</span>
         </a>
         <button
@@ -74,7 +73,7 @@ function Header() {
                 height: 40,
                 marginTop: 5,
               }}
-              onClick={handleSort}
+              onClick={(evt) => evt.preventDefault()}
             >
               Submit
             </button>
@@ -88,7 +87,7 @@ function Header() {
             <button
               className="btn btn-outline-success"
               style={{ height: 5, marginTop: 5, marginRight: 10 }}
-              onClick={handleSearch}
+              onClick={(evt) => evt.preventDefault()}
             >
               Submit
             </button>

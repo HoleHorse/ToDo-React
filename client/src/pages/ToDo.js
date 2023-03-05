@@ -11,7 +11,7 @@ function ToDo() {
   const cookies = new Cookies();
   const [loading, setLoading] = useState(true);
   const [todos, setTodos] = useState([]);
-  const id = cookies.get("user-session")
+  const id = cookies.get("user-session");
 
   useEffect(() => {
     fetch("http://localhost:4000/todo/" + id, {
