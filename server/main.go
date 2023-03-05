@@ -14,5 +14,7 @@ func main() {
 	router.POST("/edit/:id", handlers.EditToDo)
 	router.POST("/delete/:id", handlers.DeleteToDo)
 	router.POST("/add", handlers.AddToDo)
+	router.POST("/validate/:username", handlers.CheckUsername)
+	router.POST("/validate/", handlers.EmptyUsername)
 	router.Run("localhost:4000")
 }

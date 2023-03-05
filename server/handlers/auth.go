@@ -3,9 +3,7 @@ package handlers
 import (
 	"ToDo/database"
 	"encoding/json"
-	"fmt"
 	"io"
-	"net/http"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -29,8 +27,6 @@ type timestamp struct {
 	VisitsN int       `bson:"visits_n,omitempty" json:"visits_n,omitempty"`
 }
 
-var user User
-
 func Login(c *gin.Context) {
 	c.Writer.Header().Set("Access-Control-Allow-Origin", "http://localhost:3000")
 	c.Writer.Header().Set("Content-Type", "application/json")
@@ -48,24 +44,17 @@ func Login(c *gin.Context) {
 	err := users.FindOne(c, filter).Decode(&result)
 	if err != nil {
 		if err == mongo.ErrNoDocuments {
-			c.Redirect(http.StatusSeeOther, "/login")
-			fmt.Fprint(c.Writer, "err")
+			writeResult(c.Writer, "No user with this username!")
 			return
 		}
 		panic(err)
 	}
 	if !CheckPasswordHash(password, result.Password) {
-		c.Redirect(http.StatusSeeOther, "/login")
-		fmt.Fprint(c.Writer, "err")
+		writeResult(c.Writer, "The provided password is incorrect!")
 		return
 	}
-	user = result
-	updateTimeStamp(c, users)
-	if user.Role == "admin" {
-		c.Redirect(http.StatusSeeOther, "/admin")
-		return
-	}
-	writeUser(c.Writer)
+	updateTimeStamp(c, users, result)
+	writeResult(c.Writer, result)
 }
 
 func Register(c *gin.Context) {
@@ -84,7 +73,7 @@ func Register(c *gin.Context) {
 	_id := primitive.NewObjectID()
 	_, err := users.InsertOne(c, User{_id, username, password, timestamp{time.Now(), time.Now(), 0}, "user"})
 	if err != nil {
-		writeResult(c.Writer, "failure")
+		writeResult(c.Writer, "Username already occupied")
 		return
 	}
 	writeResult(c.Writer, "success")
@@ -100,7 +89,7 @@ func CheckPasswordHash(password, hash string) bool {
 	return err == nil
 }
 
-func updateTimeStamp(c *gin.Context, users *mongo.Collection) {
+func updateTimeStamp(c *gin.Context, users *mongo.Collection, user User) {
 	filter := bson.D{{Key: "_id", Value: user.Id}}
 	update := bson.D{
 		{Key: "$set", Value: bson.D{{Key: "timestamp.last", Value: time.Now()}}},
@@ -109,14 +98,31 @@ func updateTimeStamp(c *gin.Context, users *mongo.Collection) {
 	users.UpdateOne(c, filter, update)
 }
 
-func writeResult(w io.Writer, m string) {
-	res := make(map[string]string)
-	res["result"] = m
-	j, _ := json.Marshal(res)
+func writeResult(w io.Writer, result interface{}) {
+	j, _ := json.Marshal(result)
 	w.Write(j)
 }
 
-func writeUser(w io.Writer) {
-	j, _ := json.Marshal(user)
-	w.Write(j)
+func CheckUsername(c *gin.Context) {
+	c.Writer.Header().Set("Access-Control-Allow-Origin", "http://localhost:3000")
+	c.Writer.Header().Set("Content-Type", "application/json")
+	username := c.Param("username")
+	users := database.Client.Database("project").Collection("users")
+	filter := bson.D{{Key: "username", Value: username}}
+	var result User
+	err := users.FindOne(c, filter).Decode(&result)
+	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			writeResult(c.Writer, "This username is free!")
+			return
+		}
+		panic(err)
+	}
+	writeResult(c.Writer, "Username already occupied!")
+}
+
+func EmptyUsername(c *gin.Context) {
+	c.Writer.Header().Set("Access-Control-Allow-Origin", "http://localhost:3000")
+	c.Writer.Header().Set("Content-Type", "application/json")
+	writeResult(c.Writer, "")
 }

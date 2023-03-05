@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Cookies from "universal-cookie";
-import { HiddenAlert } from "../components/UI/Alert";
+import { Alert, HiddenAlert } from "../components/UI/Alert";
 
 function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("");
+  const [result, setResult] = useState(null)
   const navigate = useNavigate();
   const cookies = new Cookies();
 
@@ -34,12 +35,13 @@ function Login() {
           path: "/",
           maxAge: 3600 * 3,
         });
+        setResult(res)
         setRole(res.role)
       })
   };
   return (
     <div className="login-form">
-      <HiddenAlert />
+      {role === undefined ? <Alert m={result} /> : <HiddenAlert />}
       {role === "admin" && navigate("/admin")}
       {role === "user" && navigate("/todo")}
       <form action="/login" method="post">
@@ -52,6 +54,7 @@ function Login() {
             onChange={onChangeU}
           ></input>
         </div>
+        <div className="d-flex"></div>
         <div className="form-group">
           <input
             className="form-control"

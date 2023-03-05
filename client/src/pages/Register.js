@@ -1,23 +1,48 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { Alert, HiddenAlert } from "../components/UI/Alert";
+import ValidMessage from "../components/UI/ValidMessage";
+import SmallSpinner from "../components/UI/SmallSpinner";
 
 function Register() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [state, setState] = useState("");
+  const [valid, setValid] = useState("");
+  const [loading, setLoading] = useState(false);
+  const userRef = useRef(null);
+  const [timer, setTimer] = useState(null);
 
   function onChangeU(e) {
     setUsername(e.target.value);
+    clearTimeout(timer);
+    setTimer(
+      setTimeout(() => {
+        setLoading(true);
+        fetch("http://localhost:4000/validate/" + userRef.current.value, {
+          method: "POST",
+          mode: "cors",
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            setValid(data);
+            setLoading(false);
+          });
+      }, 750)
+    );
+    setLoading(true);
   }
   function onChangeP(e) {
     setPassword(e.target.value);
   }
-  function isAlert() {
+  function notFull() {
     return (
       (password.length < 5 || username.length < 5) &&
       (password !== "" || username !== "")
     );
+  }
+  function notValid() {
+    return valid === "Username already occupied!";
   }
 
   const handleSubmit = (e) => {
@@ -32,13 +57,15 @@ function Register() {
       body: JSON.stringify(user),
     })
       .then((res) => res.json())
-      .then((data) => setState(data.result));
+      .then((data) => {
+        setState(data);
+      });
   };
 
   return (
     <div className="login-form">
       {state === "success" && <Navigate to={"/login"} replace={true} />}
-      {isAlert() ? (
+      {notFull() ? (
         <Alert m={"Passowrd and Username must be 5 symbols long"} />
       ) : (
         <HiddenAlert />
@@ -51,7 +78,17 @@ function Register() {
             placeholder="Username"
             type={"text"}
             onChange={onChangeU}
+            ref={userRef}
+            autoComplete="off"
           ></input>
+        </div>
+        <div className="d-flex" style={{ margin: 0, padding: 0 }}>
+          {notValid() ? (
+            <ValidMessage m={valid} color={"red"} />
+          ) : (
+            <ValidMessage m={valid} color={"#10cc42"} />
+          )}
+          {loading && <SmallSpinner />}
         </div>
         <div className="form-group">
           <input
@@ -66,9 +103,7 @@ function Register() {
             onClick={handleSubmit}
             type="submit"
             className="btn btn-primary"
-            disabled={
-              username.length >= 5 && password.length >= 5 ? false : true
-            }
+            disabled={username.length < 5 || password.length < 5 || notValid() ? true : false}
           >
             Register
           </button>
