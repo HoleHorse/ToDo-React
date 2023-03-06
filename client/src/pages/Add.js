@@ -1,32 +1,39 @@
 import { useRef, useState } from "react";
-import { Navigate } from "react-router-dom"
+import { Navigate } from "react-router-dom";
 import Cookies from "universal-cookie";
-import Header from "../components/UI/Header";
+import Header from "../components/Header";
+import AES from "crypto-js/aes";
+import CryptoJS from "crypto-js";
+import cfg from "../cfg.json";
 
 function Add() {
-  const [result, setResult] = useState("")
-  const cookies = new Cookies()
+  const [result, setResult] = useState("");
+  const cookies = new Cookies();
   const title = useRef(null);
   const category = useRef(null);
   const text = useRef(null);
   const due = useRef(null);
+  const SecretKey = cfg.secret;
   const handleSubmit = (e) => {
-    e.preventDefault()
+    e.preventDefault();
+    const id = AES.decrypt(cookies.get("user-session"), SecretKey).toString(
+      CryptoJS.enc.Utf8
+    );
     var todo = {
       title: title.current.value,
       category: category.current.value,
       text: text.current.value,
       due: due.current.value,
-      author: cookies.get("user-session")
+      author: id,
     };
-    fetch("http://localhost:4000/add", {
+    fetch(cfg.server + "/add", {
       method: "POST",
       mode: "cors",
       body: JSON.stringify(todo),
     })
       .then((res) => res.json())
       .then((res) => {
-        setResult(res.result)
+        setResult(res);
       });
   };
   if (result === "success") {

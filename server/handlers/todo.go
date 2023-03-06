@@ -74,7 +74,8 @@ func EditToDo(c *gin.Context) {
 	body := ToDo{}
 	decoder := json.NewDecoder(c.Request.Body)
 	if err := decoder.Decode(&body); err != nil {
-		writeResult(c.Writer, "failure")
+		writeResult(c.Writer, err.Error())
+		return
 	}
 	defer c.Request.Body.Close()
 	body.setDeafults()
@@ -103,7 +104,8 @@ func EditToDo(c *gin.Context) {
 	}
 	_, err := todos.UpdateOne(c, filter, update)
 	if err != nil {
-		panic(err)
+		writeResult(c.Writer, err.Error())
+		return
 	}
 	writeResult(c.Writer, "success")
 }
@@ -122,20 +124,20 @@ func GetToDo(c *gin.Context) {
 	c.Writer.Header().Set("Access-Control-Allow-Origin", "http://localhost:3000")
 	c.Writer.Header().Set("Content-Type", "application/json")
 	Id, _ := primitive.ObjectIDFromHex(c.Param("id"))
-	var todos []ToDo
-	if c.Query("search") != "" {
-		todos = Seacrh(c)
-	} else if c.Query("sort") != "" {
-		k := c.Query("sort")
-		t := c.Query("sortType")
-		v := 1
-		if t == "desc" {
-			v = -1
-		}
-		todos = Sort(c, v, k, Id)
-	} else {
-		todos = GetToDoList(c, Id)
-	}
+	var todos []ToDo = GetToDoList(c, Id)
+	// if c.Query("search") != "" {
+	// 	todos = Seacrh(c)
+	// } else if c.Query("sort") != "" {
+	// 	k := c.Query("sort")
+	// 	t := c.Query("sortType")
+	// 	v := 1
+	// 	if t == "desc" {
+	// 		v = -1
+	// 	}
+	// 	todos = Sort(c, v, k, Id)
+	// } else {
+	// 	todos = GetToDoList(c, Id)
+	// }
 	j, _ := json.Marshal(todos)
 	c.Writer.Write(j)
 }

@@ -33,7 +33,7 @@ func Login(c *gin.Context) {
 	body := User{}
 	decoder := json.NewDecoder(c.Request.Body)
 	if err := decoder.Decode(&body); err != nil {
-		panic(err)
+		writeResult(c.Writer, err.Error())
 	}
 	defer c.Request.Body.Close()
 	username := body.Username
@@ -47,7 +47,7 @@ func Login(c *gin.Context) {
 			writeResult(c.Writer, "No user with this username!")
 			return
 		}
-		panic(err)
+		writeResult(c.Writer, err.Error())
 	}
 	if !CheckPasswordHash(password, result.Password) {
 		writeResult(c.Writer, "The provided password is incorrect!")
@@ -63,7 +63,7 @@ func Register(c *gin.Context) {
 	body := User{}
 	decoder := json.NewDecoder(c.Request.Body)
 	if err := decoder.Decode(&body); err != nil {
-		panic(err)
+		writeResult(c.Writer, err.Error())
 	}
 	defer c.Request.Body.Close()
 	username := body.Username
@@ -116,7 +116,7 @@ func CheckUsername(c *gin.Context) {
 			writeResult(c.Writer, "This username is free!")
 			return
 		}
-		panic(err)
+		writeResult(c.Writer, err.Error())
 	}
 	writeResult(c.Writer, "Username already occupied!")
 }

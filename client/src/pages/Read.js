@@ -1,11 +1,12 @@
-import Header from "../components/UI/Header";
-import Return from "../components/UI/Return"
+import Header from "../components/Header";
+import Return from "../components/UI/Return";
 import { useLocation, Navigate, useNavigate } from "react-router-dom";
 import { useState } from "react";
+import cfg from "../cfg.json";
 
 function Read() {
   const navigate = useNavigate();
-  const [result, setResult] = useState("todo");
+  const [result, setResult] = useState("");
   const [edit, setEdit] = useState(false);
   function clickE() {
     setEdit(true);
@@ -16,15 +17,15 @@ function Read() {
       todo: 0,
     };
   }
-  const { todo } = state; 
+  const { todo } = state;
   const handleDelete = () => {
-    fetch("http://localhost:4000/delete/" + todo._id, {
+    fetch(cfg.server + "/delete/" + todo._id, {
       method: "POST",
       mode: "cors",
     })
       .then((res) => res.json())
       .then((res) => {
-        setResult(res.result);
+        setResult(res);
       });
   };
   if (result === "success") {
@@ -52,7 +53,9 @@ function Read() {
             <button onClick={clickE} className="btn btn-warning">
               Update
             </button>
-            <button onClick={handleDelete} className="btn btn-danger">Delete</button>
+            <button onClick={handleDelete} className="btn btn-danger">
+              Delete
+            </button>
           </div>
         </div>
       </div>

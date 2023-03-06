@@ -3,6 +3,7 @@ import { Navigate } from "react-router-dom";
 import { Alert, HiddenAlert } from "../components/UI/Alert";
 import ValidMessage from "../components/UI/ValidMessage";
 import SmallSpinner from "../components/UI/SmallSpinner";
+import cfg from "../cfg.json";
 
 function Register() {
   const [username, setUsername] = useState("");
@@ -19,7 +20,7 @@ function Register() {
     setTimer(
       setTimeout(() => {
         setLoading(true);
-        fetch("http://localhost:4000/validate/" + userRef.current.value, {
+        fetch(cfg.server + "/validate/" + userRef.current.value, {
           method: "POST",
           mode: "cors",
         })
@@ -51,7 +52,7 @@ function Register() {
       username: username,
       password: password,
     };
-    fetch("http://localhost:4000/register", {
+    fetch(cfg.server + "/register", {
       method: "POST",
       mode: "cors",
       body: JSON.stringify(user),
@@ -103,7 +104,11 @@ function Register() {
             onClick={handleSubmit}
             type="submit"
             className="btn btn-primary"
-            disabled={username.length < 5 || password.length < 5 || notValid() ? true : false}
+            disabled={
+              username.length < 5 || password.length < 5 || notValid()
+                ? true
+                : false
+            }
           >
             Register
           </button>

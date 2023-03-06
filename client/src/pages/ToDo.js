@@ -1,20 +1,26 @@
 import { useState, useEffect } from "react";
-import Header from "../components/UI/Header";
+import Header from "../components/Header";
 import Spinner from "../components/UI/Spinner";
 import ToDoContainer from "../components/ToDoContainer";
 import Logout from "../components/UI/Logout";
 import Cookies from "universal-cookie";
 import { Navigate } from "react-router-dom";
 import AddBtn from "../components/UI/AddBtn";
+import AES from "crypto-js/aes";
+import CryptoJS from "crypto-js";
+import cfg from "../cfg.json"
 
 function ToDo() {
   const cookies = new Cookies();
   const [loading, setLoading] = useState(true);
   const [todos, setTodos] = useState([]);
-  const id = cookies.get("user-session");
+  const id = AES.decrypt(
+    cookies.get("user-session"),
+    cfg.secret
+  ).toString(CryptoJS.enc.Utf8);
 
   useEffect(() => {
-    fetch("http://localhost:4000/todo/" + id, {
+    fetch(cfg.server + "/todo/" + id, {
       method: "GET",
       mode: "cors",
     })

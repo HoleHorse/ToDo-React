@@ -1,12 +1,12 @@
 import { useState } from "react";
-import { useLocation, Navigate } from "react-router-dom";
-import Cookies from "universal-cookie";
-import Header from "../components/UI/Header";
+import { useLocation, Navigate, useNavigate } from "react-router-dom";
+import Header from "../components/Header";
 import Return from "../components/UI/Return";
+import cfg from "../cfg.json";
 
 function Edit() {
-  const [result, setResult] = useState("todo");
-  const cookies = new Cookies();
+  const navigate = useNavigate();
+  const [result, setResult] = useState("");
   var { state } = useLocation();
   if (state === null) {
     state = {
@@ -36,20 +36,19 @@ function Edit() {
       text: Todo.text,
       due: Todo.due,
       state: Todo.state,
-      author: cookies.get("user-session"),
     };
-    fetch("http://localhost:4000/edit/" + todo._id, {
+    fetch(cfg.server + "/edit/" + todo._id, {
       method: "POST",
       mode: "cors",
       body: JSON.stringify(t),
     })
       .then((res) => res.json())
       .then((res) => {
-        setResult(res.result);
+        setResult(res);
       });
   };
   if (result === "success") {
-    return <Navigate to={"/todo"} replace={true} />;
+    return navigate(-1);
   }
   return (
     <>

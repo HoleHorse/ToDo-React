@@ -1,9 +1,10 @@
 import { useNavigate, Navigate } from "react-router-dom";
 import { useState } from "react";
+import cfg from "../cfg.json";
 
 function ToDoCard({ todo }) {
   const navigate = useNavigate();
-  const [result, setResult] = useState("todo");
+  const [result, setResult] = useState("");
   const [read, setRead] = useState(false);
   const [edit, setEdit] = useState(false);
   function clickR() {
@@ -13,13 +14,13 @@ function ToDoCard({ todo }) {
     setEdit(true);
   }
   const handleDelete = () => {
-    fetch("http://localhost:4000/delete/" + todo._id, {
+    fetch(cfg.server + "/delete/" + todo._id, {
       method: "POST",
       mode: "cors",
     })
       .then((res) => res.json())
       .then((res) => {
-        setResult(res.result);
+        setResult(res);
       });
   };
   if (result === "success") {

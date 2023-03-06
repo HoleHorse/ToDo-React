@@ -2,12 +2,14 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Cookies from "universal-cookie";
 import { Alert, HiddenAlert } from "../components/UI/Alert";
+import AES from "crypto-js/aes";
+import cfg from "../cfg.json";
 
 function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("");
-  const [result, setResult] = useState(null)
+  const [result, setResult] = useState(null);
   const navigate = useNavigate();
   const cookies = new Cookies();
 
@@ -24,20 +26,26 @@ function Login() {
       username: username,
       password: password,
     };
-    fetch("http://localhost:4000/login", {
+    fetch(cfg.server + "/login", {
       method: "POST",
       mode: "cors",
       body: JSON.stringify(u),
     })
       .then((res) => res.json())
       .then((res) => {
-        cookies.set("user-session", res._id, {
-          path: "/",
-          maxAge: 3600 * 3,
-        });
-        setResult(res)
-        setRole(res.role)
-      })
+        setRole(res.role);
+        setResult(res);
+        cookies.set(
+          "user-session",
+          AES.encrypt(res._id.toString(), cfg.secret).toString(),
+          {
+            path: "/",
+            maxAge: 3600 * 3,
+          }
+        );
+      }).catch((err) => {
+        console.log(err);
+      });
   };
   return (
     <div className="login-form">
