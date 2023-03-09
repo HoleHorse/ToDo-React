@@ -10,17 +10,15 @@ import (
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 type ToDo struct {
 	Id       primitive.ObjectID `bson:"_id,omitempty" json:"_id,omitempty"`
-	Title    string             `bson:"title,omitempty" json:"title,omitempty"`
-	Category string             `bson:"category,omitempty" json:"category,omitempty"`
-	Text     string             `bson:"text,omitempty" json:"text,omitempty"`
+	Title    string             `bson:"title" json:"title"`
+	Category string             `bson:"category" json:"category"`
+	Text     string             `bson:"text" json:"text"`
 	Due      string             `bson:"due" json:"due"`
-	State    string             `bson:"state,omitempty" json:"state,omitempty"`
+	State    string             `bson:"state" json:"state"`
 	Author   primitive.ObjectID `bson:"author,omitempty" json:"author,omitempty"`
 }
 
@@ -125,48 +123,8 @@ func GetToDo(c *gin.Context) {
 	c.Writer.Header().Set("Content-Type", "application/json")
 	Id, _ := primitive.ObjectIDFromHex(c.Param("id"))
 	var todos []ToDo = GetToDoList(c, Id)
-	// if c.Query("search") != "" {
-	// 	todos = Seacrh(c)
-	// } else if c.Query("sort") != "" {
-	// 	k := c.Query("sort")
-	// 	t := c.Query("sortType")
-	// 	v := 1
-	// 	if t == "desc" {
-	// 		v = -1
-	// 	}
-	// 	todos = Sort(c, v, k, Id)
-	// } else {
-	// 	todos = GetToDoList(c, Id)
-	// }
 	j, _ := json.Marshal(todos)
 	c.Writer.Write(j)
-}
-
-func Seacrh(c *gin.Context) []ToDo {
-	keyword := c.Query("search")
-	todos := database.Client.Database("project").Collection("todos")
-	matchStage := bson.D{{Key: "$match", Value: bson.D{{Key: "$text", Value: bson.D{{Key: "$search", Value: "\"" + keyword + "\""}}}}}}
-	cursor, err := todos.Aggregate(c, mongo.Pipeline{matchStage})
-	if err != nil {
-		panic(err)
-	}
-	var results []ToDo
-	if err = cursor.All(c, &results); err != nil {
-		panic(err)
-	}
-	return results
-}
-
-func Sort(c *gin.Context, v int, keyword string, Id primitive.ObjectID) []ToDo {
-	todos := database.Client.Database("project").Collection("todos")
-	filter := bson.D{{Key: "author", Value: Id}}
-	opts := options.Find().SetSort(bson.D{{Key: keyword, Value: v}})
-	cursor, _ := todos.Find(c, filter, opts)
-	var results []ToDo
-	if err := cursor.All(c, &results); err != nil {
-		panic(err)
-	}
-	return results
 }
 
 func getMonth(n int) time.Month {

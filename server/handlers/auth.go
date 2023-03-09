@@ -21,6 +21,11 @@ type User struct {
 	Role      string             `bson:"role,omitempty" json:"role,omitempty"`
 }
 
+type authData struct {
+	Username  string             `bson:"username,omitempty" json:"username,omitempty"`
+	Password  string             `bson:"password,omitempty" json:"password,omitempty"`
+}
+
 type timestamp struct {
 	Start   time.Time `bson:"start,omitempty" json:"start,omitempty"`
 	Last    time.Time `bson:"last,omitempty" json:"last,omitempty"`
@@ -30,7 +35,7 @@ type timestamp struct {
 func Login(c *gin.Context) {
 	c.Writer.Header().Set("Access-Control-Allow-Origin", "http://localhost:3000")
 	c.Writer.Header().Set("Content-Type", "application/json")
-	body := User{}
+	body := authData{}
 	decoder := json.NewDecoder(c.Request.Body)
 	if err := decoder.Decode(&body); err != nil {
 		writeResult(c.Writer, err.Error())
@@ -60,7 +65,7 @@ func Login(c *gin.Context) {
 func Register(c *gin.Context) {
 	c.Writer.Header().Set("Access-Control-Allow-Origin", "http://localhost:3000")
 	c.Writer.Header().Set("Content-Type", "application/json")
-	body := User{}
+	body := authData{}
 	decoder := json.NewDecoder(c.Request.Body)
 	if err := decoder.Decode(&body); err != nil {
 		writeResult(c.Writer, err.Error())

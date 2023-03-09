@@ -5,6 +5,7 @@ import Header from "../components/Header";
 import AES from "crypto-js/aes";
 import CryptoJS from "crypto-js";
 import cfg from "../cfg.json";
+import Return from "../components/UI/Return";
 
 function Add() {
   const [result, setResult] = useState("");
@@ -109,6 +110,7 @@ function Add() {
           </div>
         </form>
       </div>
+      <Return />
     </>
   );
 }

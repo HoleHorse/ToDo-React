@@ -1,8 +1,6 @@
 import logo from "../img/logo.png";
-import SortForm from "./SortForm";
-import SearchForm from "./SearchForm";
 
-function Header() {
+function Header({children}) {
   return (
     <nav className="navbar navbar-expand-lg bg-dark">
       <div className="container">
@@ -27,8 +25,7 @@ function Header() {
         </button>
         <div className="collapse navbar-collapse" id="content">
           <ul className="navbar-nav me-auto mb-2 mb-lg-0"></ul>
-          <SortForm />
-          <SearchForm />
+          {children}
         </div>
       </div>
     </nav>

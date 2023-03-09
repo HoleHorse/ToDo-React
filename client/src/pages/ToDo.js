@@ -8,16 +8,17 @@ import { Navigate } from "react-router-dom";
 import AddBtn from "../components/UI/AddBtn";
 import AES from "crypto-js/aes";
 import CryptoJS from "crypto-js";
-import cfg from "../cfg.json"
+import cfg from "../cfg.json";
+import SearchForm from "../components/SearchForm";
+import SortForm from "../components/SortForm";
 
 function ToDo() {
   const cookies = new Cookies();
   const [loading, setLoading] = useState(true);
   const [todos, setTodos] = useState([]);
-  const id = AES.decrypt(
-    cookies.get("user-session"),
-    cfg.secret
-  ).toString(CryptoJS.enc.Utf8);
+  const id = AES.decrypt(cookies.get("user-session"), cfg.secret).toString(
+    CryptoJS.enc.Utf8
+  );
 
   useEffect(() => {
     fetch(cfg.server + "/todo/" + id, {
@@ -38,7 +39,10 @@ function ToDo() {
   if (loading) {
     return (
       <div>
-        <Header />
+        <Header>
+          <SortForm />
+          <SearchForm />
+        </Header>
         <Spinner />
         <Logout />
       </div>
@@ -46,7 +50,10 @@ function ToDo() {
   }
   return (
     <>
-      <Header />
+      <Header>
+        <SortForm />
+        <SearchForm />
+      </Header>
       <ToDoContainer todos={todos} />
       <Logout />
       <AddBtn />
