@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"ToDo/database"
-	"html/template"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -31,17 +30,4 @@ func DeleteUser(c *gin.Context) {
 	filter := bson.D{{Key: "username", Value: user}}
 	users.DeleteOne(c, filter)
 	c.Redirect(http.StatusSeeOther, "/admin")
-}
-
-func AdminPage(c *gin.Context) {
-	tmpl, err := template.ParseFiles("./templates/admin.html")
-	if err != nil {
-		ErrorHandler(c.Writer, c.Request, http.StatusInternalServerError)
-		return
-	}
-	var users []User = getUsers(c)
-	if err := tmpl.Execute(c.Writer, users); err != nil {
-		ErrorHandler(c.Writer, c.Request, http.StatusInternalServerError)
-		return
-	}
 }
