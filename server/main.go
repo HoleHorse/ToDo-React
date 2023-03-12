@@ -21,5 +21,6 @@ func main() {
 	// Admin
 	router.GET("/admin", handlers.GetUsers)
 	router.POST("/admin/delete/:user", handlers.DeleteUser)
+	// Run server
 	router.Run("localhost:4000")
 }
