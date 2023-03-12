@@ -22,9 +22,10 @@ function ToDoCard({ todo }) {
       .then((res) => {
         setResult(res);
       });
+    window.location.reload();
   };
   if (result === "success") {
-    return navigate("/todo");;
+    return navigate("/todo");
   }
   return (
     <>

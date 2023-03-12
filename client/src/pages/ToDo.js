@@ -11,6 +11,7 @@ import CryptoJS from "crypto-js";
 import cfg from "../cfg.json";
 import SearchForm from "../components/SearchForm";
 import SortForm from "../components/SortForm";
+import PaginationControls from "../components/UI/PaginationControls";
 
 function ToDo() {
   const cookies = new Cookies();
@@ -51,7 +52,8 @@ function ToDo() {
         item.title.toLowerCase().includes(searchBy.toLowerCase()) ||
         item.category.toLowerCase().includes(searchBy.toLowerCase()) ||
         item.text.toLowerCase().includes(searchBy.toLowerCase()) ||
-        item.state.toLowerCase().includes(searchBy.toLowerCase())
+        item.state.toLowerCase().includes(searchBy.toLowerCase()) ||
+        item.due.toLowerCase().includes(searchBy.toLowerCase())
       );
     })
     .sort((a, b) => {
@@ -69,6 +71,14 @@ function ToDo() {
         return 0;
       }
     });
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const ipp = 6; // items per page
+  const n = Math.ceil(todos.length / ipp);
+
+  function onPageChange(i) {
+    setCurrentPage(i);
+  }
 
   if (cookies.get("user-session") === undefined) {
     return <Navigate to={"/login"} replace={true} />;
@@ -91,9 +101,15 @@ function ToDo() {
         <SortForm sortBy={sortBy} onSortChange={onSortChange} />
         <SearchForm searchBy={searchBy} onSearchChange={onSearchChange} />
       </Header>
-      <ToDoContainer todos={filteredData} />
+      <ToDoContainer
+        todos={filteredData.slice(
+          (currentPage - 1) * ipp,
+          (currentPage - 1) * ipp + ipp
+        )}
+      />
       <Logout />
       <AddBtn />
+      {n > 1 && <PaginationControls n={n} onPageChange={onPageChange} />}
     </>
   );
 }

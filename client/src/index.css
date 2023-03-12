@@ -25,22 +25,6 @@ body {
   margin-left: 3rem;
 }
 
-@media only screen and (max-width: 600px) {
-  .landing-group img {
-    width: 178px;
-    margin-left: 1rem;
-  }
-  .logout-btn {
-    font-size: 35px;
-  }
-  .add-btn {
-    font-size: 35px;
-  }
-  .add-card label {
-    font-size: 16px;
-  }
-}
-
 .login-form {
   max-width: 400px;
   margin: 10% auto;
@@ -189,5 +173,32 @@ label {
 
   100% {
     transform: rotate(360deg);
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .landing-group img {
+    width: 178px;
+    margin-left: 1rem;
+  }
+
+  .logout-btn {
+    font-size: 35px;
+  }
+
+  .add-btn {
+    font-size: 35px;
+  }
+
+  .add-card label {
+    font-size: 16px;
+  }
+
+  .add-btn {
+    margin: 5px 5px;
+  }
+
+  .logout-btn {
+    margin: 5px 5px;
   }
 }
