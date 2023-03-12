@@ -1,4 +1,4 @@
-import { useNavigate, Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import cfg from "../cfg.json";
 
@@ -24,7 +24,7 @@ function ToDoCard({ todo }) {
       });
   };
   if (result === "success") {
-    return <Navigate to={"/todo"} replace={true} />;
+    return navigate("/todo");;
   }
   return (
     <>

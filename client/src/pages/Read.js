@@ -29,7 +29,7 @@ function Read() {
       });
   };
   if (result === "success") {
-    return <Navigate to={"/todo"} replace={true} />;
+    return navigate("/todo");
   }
   return (
     <>
