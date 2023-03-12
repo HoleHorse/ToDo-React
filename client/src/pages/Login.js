@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Cookies from "universal-cookie";
-import { Alert, HiddenAlert } from "../components/UI/Alert";
+import Alert from "../components/UI/Alert";
 import AES from "crypto-js/aes";
 import cfg from "../cfg.json";
 
@@ -49,7 +49,11 @@ function Login() {
   };
   return (
     <div className="login-form">
-      {role === undefined ? <Alert m={result} /> : <HiddenAlert />}
+      {role === undefined ? (
+        <Alert m={result} v={"visible"} />
+      ) : (
+        <Alert m={"Hidden"} v={"hidden"} />
+      )}
       {role === "admin" && navigate("/admin")}
       {role === "user" && navigate("/todo")}
       <form action="/login" method="post">

@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import { Navigate } from "react-router-dom";
-import { Alert, HiddenAlert } from "../components/UI/Alert";
+import Alert from "../components/UI/Alert";
 import ValidMessage from "../components/UI/ValidMessage";
 import SmallSpinner from "../components/UI/SmallSpinner";
 import cfg from "../cfg.json";
@@ -67,9 +67,12 @@ function Register() {
     <div className="login-form">
       {state === "success" && <Navigate to={"/login"} replace={true} />}
       {notFull() ? (
-        <Alert m={"Passowrd and Username must be 5 symbols long"} />
+        <Alert
+          m={"Passowrd and Username must be 5 symbols long"}
+          v={"visible"}
+        />
       ) : (
-        <HiddenAlert />
+        <Alert m={"Hidden"} v={"hidden"} />
       )}
       <form>
         <h2 className="text-center">Register</h2>

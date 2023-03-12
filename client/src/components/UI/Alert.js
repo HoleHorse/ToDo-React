@@ -1,20 +1,9 @@
-function Alert({ m }) {
+function Alert({ m, v }) {
   return (
-    <div className="alert alert-warning" style={{ maxWidth: 400 + "px" }}>
+    <div className="alert alert-warning" style={{ maxWidth: 400 + "px", visibility: `${v}` }}>
       {m}
     </div>
   );
 }
 
-function HiddenAlert() {
-  return (
-    <div
-      className="alert alert-warning"
-      style={{ maxWidth: 400 + "px", visibility: "hidden" }}
-    >
-      Hidden alert
-    </div>
-  );
-}
-
-export { Alert, HiddenAlert };
+export default Alert;
