@@ -33,6 +33,43 @@ function ToDo() {
         setLoading(false);
       });
   }, [id]);
+
+  const [searchBy, setSeacrhBy] = useState("");
+  const [sortBy, setSortBy] = useState("title");
+
+  function onSearchChange(e) {
+    setSeacrhBy(e.target.value);
+  }
+
+  function onSortChange(value) {
+    setSortBy(value);
+  }
+
+  const filteredData = todos
+    .filter((item) => {
+      return (
+        item.title.toLowerCase().includes(searchBy.toLowerCase()) ||
+        item.category.toLowerCase().includes(searchBy.toLowerCase()) ||
+        item.text.toLowerCase().includes(searchBy.toLowerCase()) ||
+        item.state.toLowerCase().includes(searchBy.toLowerCase())
+      );
+    })
+    .sort((a, b) => {
+      if (sortBy === "due") {
+        return a.due.localeCompare(b.due);
+      } else if (sortBy === "title") {
+        return a.title.localeCompare(b.title);
+      } else if (sortBy === "category") {
+        return a.category.localeCompare(b.category);
+      } else if (sortBy === "text") {
+        return a.text.localeCompare(b.text);
+      } else if (sortBy === "text") {
+        return a.text.localeCompare(b.text);
+      } else {
+        return 0;
+      }
+    });
+
   if (cookies.get("user-session") === undefined) {
     return <Navigate to={"/login"} replace={true} />;
   }
@@ -40,8 +77,8 @@ function ToDo() {
     return (
       <div>
         <Header>
-          <SortForm />
-          <SearchForm />
+          <SortForm sortBy={sortBy} onSortChange={onSortChange} />
+          <SearchForm searchBy={searchBy} onSearchChange={onSearchChange} />
         </Header>
         <Spinner />
         <Logout />
@@ -51,10 +88,10 @@ function ToDo() {
   return (
     <>
       <Header>
-        <SortForm />
-        <SearchForm />
+        <SortForm sortBy={sortBy} onSortChange={onSortChange} />
+        <SearchForm searchBy={searchBy} onSearchChange={onSearchChange} />
       </Header>
-      <ToDoContainer todos={todos} />
+      <ToDoContainer todos={filteredData} />
       <Logout />
       <AddBtn />
     </>

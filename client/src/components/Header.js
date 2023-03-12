@@ -25,7 +25,7 @@ function Header({children}) {
         </button>
         <div className="collapse navbar-collapse" id="content">
           <ul className="navbar-nav me-auto mb-2 mb-lg-0"></ul>
-          {children}
+          <div className="d-flex">{children}</div>
         </div>
       </div>
     </nav>

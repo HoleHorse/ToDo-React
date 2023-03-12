@@ -39,7 +39,9 @@ function ToDoCard({ todo }) {
           <h6 className="card-subtitle mb-2 text-muted">
             Category: {todo.category}
           </h6>
-          <h6 className="card-subtitle mb-2 text-muted">Due: {todo.due}</h6>
+          <h6 className="card-subtitle mb-2 text-muted">
+            Due: {todo.due.slice(0, 10) + " " + todo.due.slice(11, 16)}
+          </h6>
           <p className="card-text">{todo.text.slice(0, 100) + "..."}</p>
         </div>
         <div className="card-footer d-flex justify-content-between">
@@ -50,7 +52,11 @@ function ToDoCard({ todo }) {
           >
             Update
           </button>
-          <button onClick={handleDelete} className="btn btn-danger" style={{ width: 80 }}>
+          <button
+            onClick={handleDelete}
+            className="btn btn-danger"
+            style={{ width: 80 }}
+          >
             Delete
           </button>
           <button

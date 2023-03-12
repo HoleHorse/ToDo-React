@@ -1,14 +1,14 @@
-function SearchForm() {
+function SearchForm({searchBy, onSearchChange}) {
   return (
-    <form className="d-flex" style={{ marginBottom: 10 }}>
+    <form className="input-group">
       <input
         className="form-control"
         placeholder="Search"
-        style={{ height: 5, marginTop: 5 }}
+        value={searchBy}
+        onChange={onSearchChange}
       />
       <button
         className="btn btn-outline-success"
-        style={{ height: 5, marginTop: 5, marginRight: 10 }}
         onClick={(evt) => evt.preventDefault()}
       >
         Submit
