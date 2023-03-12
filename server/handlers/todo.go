@@ -52,6 +52,7 @@ func AddToDo(c *gin.Context) {
 	title := body.Title
 	category := body.Category
 	text := body.Text
+	state := body.State
 	date := strings.FieldsFunc(body.Due, split)
 	year, _ := strconv.Atoi(date[0])
 	month, _ := strconv.Atoi(date[1])
@@ -62,7 +63,7 @@ func AddToDo(c *gin.Context) {
 	due := time.Date(year, getMonth(month), day, hour, minute, 0, 0, loc).Format(time.RFC3339)
 	due = due[:16]
 	_id := primitive.NewObjectID()
-	todos.InsertOne(c, ToDo{_id, title, category, text, due, "Not complete", body.Author})
+	todos.InsertOne(c, ToDo{_id, title, category, text, due, state, body.Author})
 	writeResult(c.Writer, "success")
 }
 

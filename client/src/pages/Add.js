@@ -14,6 +14,7 @@ function Add() {
   const category = useRef(null);
   const text = useRef(null);
   const due = useRef(null);
+  const state = useRef(null);
   const SecretKey = cfg.secret;
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -25,6 +26,7 @@ function Add() {
       category: category.current.value,
       text: text.current.value,
       due: due.current.value,
+      state: state.current.value,
       author: id,
     };
     fetch(cfg.server + "/add", {
@@ -95,6 +97,18 @@ function Add() {
                   </td>
                   <td>
                     <input ref={due} type="datetime-local" name="due" />
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <label className="form-label">State:</label>
+                  </td>
+                  <td>
+                    <input
+                      type="text"
+                      name="state"
+                      ref={state}
+                    />
                   </td>
                 </tr>
                 <tr>
