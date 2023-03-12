@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import Header from "../components/Header";
 import Spinner from "../components/UI/Spinner";
 import ToDoContainer from "../components/ToDoContainer";
@@ -35,6 +35,8 @@ function ToDo() {
       });
   }, [id]);
 
+  const memoizedTodos = useMemo(() => todos, [todos]);
+
   const [searchBy, setSeacrhBy] = useState("");
   const [sortBy, setSortBy] = useState("title");
 
@@ -46,35 +48,37 @@ function ToDo() {
     setSortBy(value);
   }
 
-  const filteredData = todos
-    .filter((item) => {
-      return (
-        item.title.toLowerCase().includes(searchBy.toLowerCase()) ||
-        item.category.toLowerCase().includes(searchBy.toLowerCase()) ||
-        item.text.toLowerCase().includes(searchBy.toLowerCase()) ||
-        item.state.toLowerCase().includes(searchBy.toLowerCase()) ||
-        item.due.toLowerCase().includes(searchBy.toLowerCase())
-      );
-    })
-    .sort((a, b) => {
-      if (sortBy === "due") {
-        return a.due.localeCompare(b.due);
-      } else if (sortBy === "title") {
-        return a.title.localeCompare(b.title);
-      } else if (sortBy === "category") {
-        return a.category.localeCompare(b.category);
-      } else if (sortBy === "text") {
-        return a.text.localeCompare(b.text);
-      } else if (sortBy === "text") {
-        return a.text.localeCompare(b.text);
-      } else {
-        return 0;
-      }
-    });
+  const filteredData = useMemo(() => {
+    var data = memoizedTodos
+      .filter((item) => {
+        return (
+          item.title.toLowerCase().includes(searchBy.toLowerCase()) ||
+          item.category.toLowerCase().includes(searchBy.toLowerCase()) ||
+          item.text.toLowerCase().includes(searchBy.toLowerCase()) ||
+          item.state.toLowerCase().includes(searchBy.toLowerCase())
+        );
+      })
+      .sort((a, b) => {
+        if (sortBy === "due") {
+          return a.due.localeCompare(b.due);
+        } else if (sortBy === "title") {
+          return a.title.localeCompare(b.title);
+        } else if (sortBy === "category") {
+          return a.category.localeCompare(b.category);
+        } else if (sortBy === "text") {
+          return a.text.localeCompare(b.text);
+        } else if (sortBy === "text") {
+          return a.text.localeCompare(b.text);
+        } else {
+          return 0;
+        }
+      });
+    return data;
+  }, [memoizedTodos, searchBy, sortBy]);
 
   const [currentPage, setCurrentPage] = useState(1);
   const ipp = 6; // items per page
-  const n = Math.ceil(todos.length / ipp);
+  const n = Math.ceil(filteredData.length / ipp);
 
   function onPageChange(i) {
     setCurrentPage(i);
